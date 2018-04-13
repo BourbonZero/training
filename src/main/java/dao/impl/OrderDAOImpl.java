@@ -26,7 +26,8 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public boolean changeOrder(String orderid, OrderState state, double consumption) {
+	public boolean changeOrder(int orderid, OrderState state, double consumption) {
 		return false;
 	}
+
 }

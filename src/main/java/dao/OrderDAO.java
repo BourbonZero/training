@@ -18,5 +18,5 @@ public interface OrderDAO {
 
 	ArrayList<Order> findOrdersByUserid(String userid);
 
-	boolean changeOrder(String orderid, OrderState state, double consumption);
+	boolean changeOrder(int orderid, OrderState state, double consumption);
 }

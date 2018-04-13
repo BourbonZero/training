@@ -45,10 +45,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean setAccount(String id, String password) {
+	public boolean setAccount(String userid, String id, String password) {
 		Account account = accountDAO.findAccount(id);
 		if (account != null && account.getPassword().equals(password)) {
-			return true;
+			User user = userDAO.findUserInfo(userid);
+			user.setAccountid(id);
+			return userDAO.changeUser(user);
 		}
 		return false;
 	}
@@ -66,10 +68,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean exchangePoint(String userid) {
 		User user = userDAO.findUserInfo(userid);
-		accountDAO.changeAccount(user.getAccountid(), user.getPoint());
-		user.setPoint(0);
-		return userDAO.changeUser(user);
-
+		double change = VIPCalculator.calChangeFromPoint(user.getPoint());
+		if (accountDAO.changeAccount(user.getAccountid(), change)){
+			user.setPoint(0);
+			return userDAO.changeUser(user);
+		}
+		return false;
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public interface UserService {
 
 	User loginUser(String id, String password);
 
-	boolean setAccount(String id, String password);
+	boolean setAccount(String userid, String id, String password);
 
 	User findInfo(String id);
 

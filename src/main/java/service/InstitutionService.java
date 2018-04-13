@@ -13,7 +13,7 @@ public interface InstitutionService {
 
 	int registerInstitution(Institution institution);
 
-	Institution loginInstitution(String id, String password);
+	boolean loginInstitution(int id, String password);
 
 	int changeInstitution(String id, String info);
 

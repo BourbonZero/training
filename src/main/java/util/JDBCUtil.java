@@ -17,7 +17,7 @@ public class JDBCUtil {
 
 	private static String user = "root";
 	private static String password = "150607";
-	private static String url = "jdbc:mysql://localhost:3306/j2ee";
+	private static String url = "jdbc:mysql://localhost:3306/j2ee?useSSL=false";
 	private static String className = "com.mysql.jdbc.Driver";
 
 	@Bean

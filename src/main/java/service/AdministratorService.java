@@ -1,6 +1,7 @@
 package service;
 
 import entity.Institution;
+import sun.security.util.Password;
 
 /**
  * @author Bourbon
@@ -9,7 +10,9 @@ import entity.Institution;
  */
 public interface AdministratorService {
 
-	boolean checkInstitution(Institution institution);
+	boolean checkLogin(String id, String password);
+
+	boolean checkAddInstitution(Institution institution);
 
 	int distributePay();
 

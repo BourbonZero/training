@@ -1,5 +1,6 @@
 package controller;
 
+import entity.Institution;
 import entity.Login;
 import entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,12 @@ public class HomeController {
 	public String home(Model model){
 		model.addAttribute(new Login());
 		return "home";
+	}
+
+	@RequestMapping(value = "/a" ,method = RequestMethod.GET)
+	public String a(){
+		System.out.println(institutionService.loginInstitution(18,"0000"));
+		return "register";
 	}
 
 	@RequestMapping(value = "/",method = RequestMethod.POST)

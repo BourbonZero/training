@@ -21,12 +21,16 @@ public class InstitutionServiceImpl implements InstitutionService {
 
 	@Override
 	public int registerInstitution(Institution institution) {
-		return 0;
+		return institutionDAO.addInstitution(institution);
 	}
 
 	@Override
-	public Institution loginInstitution(String id, String password) {
-		return null;
+	public boolean loginInstitution(int id, String password) {
+		Institution institution = institutionDAO.findInstitution(id);
+		if (institution != null && institution.getPassword().equals(password) && institution.isPermission()) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override

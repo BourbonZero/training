@@ -9,7 +9,7 @@ import common.OrderState;
  */
 public class Order {
 
-	private String orderid;
+	private int orderid;
 	private String userid;
 	private String courseid;
 	private String courseName;
@@ -19,11 +19,11 @@ public class Order {
 	private double discount;
 	private double consumption;
 
-	public String getOrderid() {
+	public int getOrderid() {
 		return orderid;
 	}
 
-	public void setOrderid(String orderid) {
+	public void setOrderid(int orderid) {
 		this.orderid = orderid;
 	}
 

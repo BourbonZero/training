@@ -12,7 +12,7 @@ public class Account {
 
 	private String id;
 	private String password;
-	private String balance;
+	private double balance;
 
 	public String getId() {
 		return id;
@@ -30,11 +30,11 @@ public class Account {
 		this.password = password;
 	}
 
-	public String getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(String balance) {
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
 }

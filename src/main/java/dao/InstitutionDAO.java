@@ -9,9 +9,9 @@ import entity.Institution;
  */
 public interface InstitutionDAO {
 
-	String addInstitution(Institution institution);
+	int addInstitution(Institution institution);
 
-	int changeInstitution(Institution institution);
+	boolean changeInstitution(Institution institution);
 
-	Institution findInstitution(String id);
+	Institution findInstitution(int id);
 }

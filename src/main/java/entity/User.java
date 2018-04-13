@@ -12,7 +12,7 @@ public class User {
 	private String userid;
 	private String password;
 	private double totalConsumption = 0;
-	private boolean isVIP = false;
+	private boolean isVIP = true;
 	private int viplevel = 0;
 	private String info = "";
 	private String accountid;
