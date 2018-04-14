@@ -3,6 +3,9 @@ package service;
 import entity.Course;
 import entity.Institution;
 import entity.MyClass;
+import entity.Order;
+
+import java.util.List;
 
 /**
  * @author Bourbon
@@ -15,10 +18,15 @@ public interface InstitutionService {
 
 	boolean loginInstitution(int id, String password);
 
-	int changeInstitution(String id, String info);
+	Institution findInstitution(int id);
 
-	int publishCourse(Course course);
+	boolean changeInstitution(int id, String info);
 
-	int recordScore(MyClass myClass, double score);
+	boolean publishCourse(Course course);
 
+	boolean createOfflineOrder(String userid, int courseid, String classType);
+
+	boolean recordScore(String userid, int courseid, int score);
+
+	List<Order> lookoverOrders(int id);
 }

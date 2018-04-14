@@ -1,7 +1,11 @@
 package service;
 
 import entity.Institution;
+import entity.Order;
+import entity.User;
 import sun.security.util.Password;
+
+import java.util.List;
 
 /**
  * @author Bourbon
@@ -12,9 +16,13 @@ public interface AdministratorService {
 
 	boolean checkLogin(String id, String password);
 
-	boolean checkAddInstitution(Institution institution);
+	boolean checkAddInstitution(int id);
 
-	int distributePay();
+	boolean distributePay();
 
+	List<User> lookoverUsers();
 
+	List<Institution> lookoverInstitutions();
+
+	List<Order> lookoverOrders();
 }

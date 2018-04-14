@@ -1,8 +1,6 @@
 package controller;
 
-import entity.Institution;
-import entity.Login;
-import entity.User;
+import entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import service.AdministratorService;
 import service.InstitutionService;
 import service.UserService;
+
+import java.time.LocalDate;
 
 /**
  * @author Bourbon
@@ -26,6 +27,8 @@ public class HomeController {
 	private UserService userService;
 	@Autowired
 	private InstitutionService institutionService;
+	@Autowired
+	private AdministratorService administratorService;
 
 	@RequestMapping(value = "/",method = RequestMethod.GET)
 	public String home(Model model){
@@ -35,7 +38,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/a" ,method = RequestMethod.GET)
 	public String a(){
-		System.out.println(institutionService.loginInstitution(18,"0000"));
+		System.out.println(institutionService.recordScore("000",1,60));
 		return "register";
 	}
 

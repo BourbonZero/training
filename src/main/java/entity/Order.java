@@ -11,13 +11,16 @@ public class Order {
 
 	private int orderid;
 	private String userid;
-	private String courseid;
+	private int courseid;
 	private String courseName;
 	private String classType;
-	private OrderState state;
+	private String state;
 	private double price;
 	private double discount;
 	private double consumption;
+	private double actualConsumption;
+	private double institutionIncome;
+	private double collegeIncome;
 
 	public int getOrderid() {
 		return orderid;
@@ -35,11 +38,11 @@ public class Order {
 		this.userid = userid;
 	}
 
-	public String getCourseid() {
+	public int getCourseid() {
 		return courseid;
 	}
 
-	public void setCourseid(String courseid) {
+	public void setCourseid(int courseid) {
 		this.courseid = courseid;
 	}
 
@@ -59,11 +62,11 @@ public class Order {
 		this.classType = classType;
 	}
 
-	public OrderState getState() {
+	public String getState() {
 		return state;
 	}
 
-	public void setState(OrderState state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 
@@ -89,5 +92,29 @@ public class Order {
 
 	public void setConsumption(double consumption) {
 		this.consumption = consumption;
+	}
+
+	public double getInstitutionIncome() {
+		return institutionIncome;
+	}
+
+	public void setInstitutionIncome(double institutionIncome) {
+		this.institutionIncome = institutionIncome;
+	}
+
+	public double getCollegeIncome() {
+		return collegeIncome;
+	}
+
+	public void setCollegeIncome(double collegeIncome) {
+		this.collegeIncome = collegeIncome;
+	}
+
+	public double getActualConsumption() {
+		return actualConsumption;
+	}
+
+	public void setActualConsumption(double actualConsumption) {
+		this.actualConsumption = actualConsumption;
 	}
 }

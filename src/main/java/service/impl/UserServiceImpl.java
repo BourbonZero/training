@@ -9,7 +9,9 @@ import service.UserService;
 import util.VIPCalculator;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author Bourbon
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private AccountDAO accountDAO;
 	@Autowired
-	private ClassDAO classDAO;
+	private MyClassDAO myClassDAO;
 
 	@Override
 	public boolean registerUser(User user) {
@@ -69,7 +71,7 @@ public class UserServiceImpl implements UserService {
 	public boolean exchangePoint(String userid) {
 		User user = userDAO.findUserInfo(userid);
 		double change = VIPCalculator.calChangeFromPoint(user.getPoint());
-		if (accountDAO.changeAccount(user.getAccountid(), change)){
+		if (accountDAO.changeAccount(user.getAccountid(), change)) {
 			user.setPoint(0);
 			return userDAO.changeUser(user);
 		}
@@ -77,65 +79,114 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean submitOrder(Order order) {
-		Course course = courseDAO.findCourse(order.getCourseid());
+	public boolean submitOrder(String userid, int courseid, String classType) {
+		Course course = courseDAO.findCourse(courseid);
+		Order order = new Order();
 		boolean flag = false;
-		if (order.getClassType().equals("大班")){
-			if (course.getBigClassCurrentNum()<course.getBigClassNum()){
+		if (classType.equals("大班")) {
+			if (course.getBigClassCurrentNum() < course.getBigClassNum()) {
+				course.setBigClassCurrentNum(course.getBigClassCurrentNum() + 1);
+				courseDAO.changeCourse(course);
+				order.setPrice(course.getBigClassPrice());
 				flag = true;
 			}
-		}else {
-			if (course.getSmallClassCurrentNum()<course.getSmallClassNum()){
+		} else {
+			if (course.getSmallClassCurrentNum() < course.getSmallClassNum()) {
+				course.setSmallClassCurrentNum(course.getSmallClassCurrentNum()+1);
+				courseDAO.changeCourse(course);
+				order.setPrice(course.getSmallClassPrice());
 				flag = true;
 			}
 		}
-		if (flag){
+		if (flag) {
+			order.setUserid(userid);
+			order.setCourseid(courseid);
+			order.setCourseName(course.getCoursename());
+			order.setClassType(classType);
+			order.setState(OrderState.submit);
 			order.setDiscount(VIPCalculator.calDiscountByViplevel(userDAO.findUserInfo(order.getUserid()).getViplevel()));
-			return orderDAO.addOrder(order);
+			order.setConsumption(order.getPrice() * (1 - order.getDiscount()));
+
+			Timer timer = new Timer();
+			int id = orderDAO.addOrder(order);
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					Order o = orderDAO.find(id);
+					if (o.getState().equals(OrderState.submit)){
+						o.setState(OrderState.cancel);
+						orderDAO.changeOrder(o);
+					}
+				}
+			}, 1000*60*15);
+			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean payOrder(Order order) {
-		double consumption = order.getPrice() * (1 - order.getDiscount());
-		orderDAO.changeOrder(order.getOrderid(), OrderState.已付款, consumption);
-		double total = userDAO.findUserInfo(order.getUserid()).getTotalConsumption();
+	public boolean payOrder(int orderid) {
+		Order order = orderDAO.find(orderid);
+		if (order.getState().equals(OrderState.submit)) {
+			accountDAO.changeAccount(userDAO.findUserInfo(order.getUserid()).getAccountid(), 0 - order.getConsumption());
 
-		return true;
+			order.setActualConsumption(order.getConsumption());
+			order.setState(OrderState.pay);
+
+			addConsumption(order.getUserid(), order.getActualConsumption());
+
+			MyClass myClass = new MyClass();
+			myClass.setUserid(order.getUserid());
+			myClass.setCourseid(order.getCourseid());
+			myClass.setCourseName(courseDAO.findCourse(order.getCourseid()).getCoursename());
+			myClassDAO.addMyClass(myClass);
+
+			return orderDAO.changeOrder(order);
+		}
+		return false;
 	}
 
 	@Override
-	public boolean cancelOrder(Order order) {
-		if (order.getState() == OrderState.待付款){
-			return orderDAO.changeOrder(order.getOrderid(),OrderState.已取消, 0);
-		}else if (order.getState() == OrderState.已付款){
+	public boolean cancelOrder(int orderid) {
+		Order order = orderDAO.find(orderid);
+		if (order.getState().equals(OrderState.submit)) {
+			order.setState(OrderState.cancel);
+			return orderDAO.changeOrder(order);
+		}
+		else if (order.getState().equals(OrderState.pay)) {
+			order.setState(OrderState.back);
 			LocalDate localDate = courseDAO.findCourse(order.getCourseid()).getBeginTime();
-			double consumption = order.getConsumption();
-			if (localDate.isAfter(LocalDate.now())){
-				accountDAO.changeAccount(userDAO.findUserInfo(order.getUserid()).getAccountid(), consumption);
-				consumption = 0;
+			if (!LocalDate.now().isAfter(localDate)) {
+				addConsumption(order.getUserid(), -order.getActualConsumption());
+				accountDAO.changeAccount(userDAO.findUserInfo(order.getUserid()).getAccountid(), order.getActualConsumption());
+				order.setActualConsumption(0);
 			}
-			return orderDAO.changeOrder(order.getOrderid(), OrderState.已退款,consumption);
+			myClassDAO.delete(order.getUserid(), order.getCourseid());
+			return orderDAO.changeOrder(order);
 		}
 		return false;
 	}
 
 	@Override
-	public ArrayList<Order> lookoverOrders(String userid) {
+	public List<Order> lookoverOrders(String userid) {
 		return orderDAO.findOrdersByUserid(userid);
 	}
 
 	@Override
-	public ArrayList<Course> lookoverCourses() {
-
+	public List<Course> lookoverCourses() {
 		return courseDAO.findAllCourses();
 	}
 
 	@Override
-	public ArrayList<MyClass> lookoeverMyclasses(String userid) {
-
-		return classDAO.findClassByUserid(userid);
+	public List<MyClass> lookoverMyclasses(String userid) {
+		return myClassDAO.findClassByUserid(userid);
 	}
 
+	private void addConsumption(String userid, double consumption) {
+		User user = userDAO.findUserInfo(userid);
+		user.setTotalConsumption(user.getTotalConsumption() + consumption);
+		user.setViplevel(VIPCalculator.calViplevelFromConsumption(user.getTotalConsumption()));
+		user.setPoint(user.getPoint() + VIPCalculator.calPointFromConsumption(consumption));
+		userDAO.changeUser(user);
+	}
 }

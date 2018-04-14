@@ -5,6 +5,7 @@ import entity.Order;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bourbon
@@ -14,9 +15,13 @@ import java.util.ArrayList;
 @Repository
 public interface OrderDAO {
 
-	boolean addOrder(Order order);
+	int addOrder(Order order);
 
-	ArrayList<Order> findOrdersByUserid(String userid);
+	Order find(int id);
 
-	boolean changeOrder(int orderid, OrderState state, double consumption);
+	List<Order> findOrdersByUserid(String userid);
+
+	List<Order> findOrdersByInstitutionid(int id);
+
+	boolean changeOrder(Order order);
 }

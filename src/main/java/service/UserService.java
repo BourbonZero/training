@@ -7,6 +7,7 @@ import entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bourbon
@@ -27,15 +28,15 @@ public interface UserService {
 
 	boolean exchangePoint(String userid);
 
-	boolean submitOrder(Order order);
+	boolean submitOrder(String userid, int courseid, String classType);
 
-	boolean payOrder(Order order);
+	boolean payOrder(int orderid);
 
-	boolean cancelOrder(Order order);
+	boolean cancelOrder(int orderid);
 
-	ArrayList<Order> lookoverOrders(String userid);
+	List<Order> lookoverOrders(String userid);
 
-	ArrayList<Course> lookoverCourses();
+	List<Course> lookoverCourses();
 
-	ArrayList<MyClass> lookoeverMyclasses(String userid);
+	List<MyClass> lookoverMyclasses(String userid);
 }

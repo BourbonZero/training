@@ -3,6 +3,7 @@ package dao;
 import entity.Course;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bourbon
@@ -11,9 +12,13 @@ import java.util.ArrayList;
  */
 public interface CourseDAO {
 
-	Course findCourse(String courseid);
+	Course findCourse(int courseid);
 
-	ArrayList<Course> findAllCourses();
+	List<Course> findCoursesByInstitution(int id);
 
-	int addCourse(Course course);
+	List<Course> findAllCourses();
+
+	boolean addCourse(Course course);
+
+	boolean changeCourse(Course course);
 }

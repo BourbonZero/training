@@ -27,8 +27,6 @@ public class AccountDAOImpl implements AccountDAO {
 	public boolean changeAccount(String id, double change) {
 		Account account = findAccount(id);
 		double result = account.getBalance() + change;
-		System.out.println(account.getBalance());
-		System.out.println(result);
 		String sql = "update account set balance = ? where id = ?";
 		if (jdbcTemplate.update(sql, result, id)> 0 ){
 			return true;

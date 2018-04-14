@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author Bourbon
@@ -51,6 +52,12 @@ public class UserDAOImpl implements UserDAO {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<User> findAllUsers() {
+		String sql = "SELECT * FROM user";
+		return jdbcTemplate.query(sql, new UserRowMapper());
 	}
 
 	private static final class UserRowMapper implements RowMapper<User> {

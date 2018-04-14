@@ -12,8 +12,10 @@ public class VIPCalculator {
 	 * 每级打折10%，最高80%
 	 */
 	public static double calDiscountByViplevel(int viplevel) {
-		double discount = viplevel / 10;
-		discount = (discount > 0.8) ? 0.8 : discount;
+		double discount = viplevel / 10.0;
+		if (discount > 0.8){
+			discount = 0.8;
+		}
 		return discount;
 	}
 
@@ -22,7 +24,9 @@ public class VIPCalculator {
 	 * 对10开方阶次
 	 */
 	public static int calViplevelFromConsumption(double consumption) {
-		return (int) Math.pow(consumption, 0.1);
+		System.out.println(consumption);
+		System.out.println(Math.pow(consumption, 0.1));
+		return (int) Math.log10(consumption);
 	}
 
 	/**

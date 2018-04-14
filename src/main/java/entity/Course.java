@@ -12,11 +12,10 @@ import java.time.LocalDate;
 @Component
 public class Course {
 
-	private String courseid;
+	private int courseid;
 	private String coursename;
-	private String institutionid;
-	private String institutionName;
-	private String courseInfo;
+	private int institutionid;
+	private String info;
 	private int weekNum;
 	private int classesPerWeek;
 	private int bigClassNum;
@@ -27,11 +26,11 @@ public class Course {
 	private double smallClassPrice;
 	private LocalDate beginTime;
 
-	public String getCourseid() {
+	public int getCourseid() {
 		return courseid;
 	}
 
-	public void setCourseid(String courseid) {
+	public void setCourseid(int courseid) {
 		this.courseid = courseid;
 	}
 
@@ -43,28 +42,20 @@ public class Course {
 		this.coursename = coursename;
 	}
 
-	public String getInstitutionid() {
+	public int getInstitutionid() {
 		return institutionid;
 	}
 
-	public void setInstitutionid(String institutionid) {
+	public void setInstitutionid(int institutionid) {
 		this.institutionid = institutionid;
 	}
 
-	public String getInstitutionName() {
-		return institutionName;
+	public String getInfo() {
+		return info;
 	}
 
-	public void setInstitutionName(String institutionName) {
-		this.institutionName = institutionName;
-	}
-
-	public String getCourseInfo() {
-		return courseInfo;
-	}
-
-	public void setCourseInfo(String courseInfo) {
-		this.courseInfo = courseInfo;
+	public void setInfo(String info) {
+		this.info = info;
 	}
 
 	public int getWeekNum() {
