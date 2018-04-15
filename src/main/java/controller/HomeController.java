@@ -30,35 +30,61 @@ public class HomeController {
 	@Autowired
 	private AdministratorService administratorService;
 
-	@RequestMapping(value = "/",method = RequestMethod.GET)
-	public String home(Model model){
-		model.addAttribute(new Login());
-		return "home";
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView home(Model model) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("home");
+		return modelAndView;
 	}
 
-	@RequestMapping(value = "/a" ,method = RequestMethod.GET)
-	public String a(){
-		System.out.println(institutionService.recordScore("000",1,60));
-		return "register";
-	}
-
-	@RequestMapping(value = "/",method = RequestMethod.POST)
-	public String login(Login login){
-		if (login.getRole().equals( "user")){
-			User user = userService.loginUser(login.getLoginid(), login.getPassword());
-			if (user!=null){
-				return "redirect: /user";
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(String userid, String password, String role) {
+		if (role.equals("user")) {
+			if (userService.loginUser(userid, password)) {
+				return "redirect:/user/" + userid;
 			}
-		}else if (login.getRole() == "institution"){
-
-		}else if(login.getRole() == "manager"){
-
+		} else if (role.equals("institution")) {
+			if (institutionService.loginInstitution(Integer.parseInt(userid), password)) {
+				return "redirect:/institution/" + userid;
+			}
+		} else {
+			if (administratorService.checkLogin(userid, password)) {
+				return "redirect:/administrator/" + userid;
+			}
 		}
-		return "register";
+		return "redirect:/";
 	}
 
-	@RequestMapping(value = "register")
-	public String user(){
-		return "register";
+	@RequestMapping(value = "userRegister", method = RequestMethod.GET)
+	public String userRegister() {
+		return "userRegister";
+	}
+
+	@RequestMapping(value = "userRegister", method = RequestMethod.POST)
+	public String userAdd(String userid, String password, String repeatpassword) {
+		if (password.equals(repeatpassword) && userService.registerUser(userid, password)) {
+			return "redirect:/user/" + userid;
+		}
+		return "redirect:/userRegister";
+	}
+
+	@RequestMapping(value = "institutionRegister", method = RequestMethod.GET)
+	public String institutionRegister(){
+		return "institutionRegister";
+	}
+
+	@RequestMapping(value = "institutionRegister", method = RequestMethod.POST)
+	public ModelAndView institutionAdd(String password, String repeatpassword, String info){
+		Institution institution = new Institution();
+		institution.setPassword(password);
+		institution.setInfo(info);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("institutionRegisterS");
+		if (password.equals(repeatpassword)){
+			int id = institutionService.registerInstitution(institution);
+			modelAndView.addObject("id", id);
+			return  modelAndView;
+		}
+		return modelAndView;
 	}
 }

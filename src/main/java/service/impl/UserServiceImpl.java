@@ -33,17 +33,21 @@ public class UserServiceImpl implements UserService {
 	private MyClassDAO myClassDAO;
 
 	@Override
-	public boolean registerUser(User user) {
+	public boolean registerUser(String userid, String password) {
+		User user = new User();
+		user.setUserid(userid);
+		user.setPassword(password);
+		user.setVIP(true);
 		return userDAO.addUser(user);
 	}
 
 	@Override
-	public User loginUser(String id, String password) {
+	public boolean loginUser(String id, String password) {
 		User user = userDAO.findUserInfo(id);
 		if (user != null && user.getPassword().equals(password)) {
-			return user;
+			return true;
 		}
-		return null;
+		return false;
 	}
 
 	@Override
@@ -83,10 +87,11 @@ public class UserServiceImpl implements UserService {
 		Course course = courseDAO.findCourse(courseid);
 		Order order = new Order();
 		boolean flag = false;
-		if (classType.equals("大班")) {
+		if (classType.equals("big")) {
 			if (course.getBigClassCurrentNum() < course.getBigClassNum()) {
 				course.setBigClassCurrentNum(course.getBigClassCurrentNum() + 1);
 				courseDAO.changeCourse(course);
+				order.setClassType("大班");
 				order.setPrice(course.getBigClassPrice());
 				flag = true;
 			}
@@ -94,6 +99,7 @@ public class UserServiceImpl implements UserService {
 			if (course.getSmallClassCurrentNum() < course.getSmallClassNum()) {
 				course.setSmallClassCurrentNum(course.getSmallClassCurrentNum()+1);
 				courseDAO.changeCourse(course);
+				order.setClassType("小班");
 				order.setPrice(course.getSmallClassPrice());
 				flag = true;
 			}
@@ -102,7 +108,6 @@ public class UserServiceImpl implements UserService {
 			order.setUserid(userid);
 			order.setCourseid(courseid);
 			order.setCourseName(course.getCoursename());
-			order.setClassType(classType);
 			order.setState(OrderState.submit);
 			order.setDiscount(VIPCalculator.calDiscountByViplevel(userDAO.findUserInfo(order.getUserid()).getViplevel()));
 			order.setConsumption(order.getPrice() * (1 - order.getDiscount()));

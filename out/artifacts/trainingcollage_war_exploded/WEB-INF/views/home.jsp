@@ -9,20 +9,21 @@
 <%@ taglib prefix="sf"  uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
-    <title>my</title>
+    <title>登录</title>
 </head>
 <body>
-    <sf:form method="POST" modelAttribute="login">
-        userid:<sf:input path="loginid"></sf:input>
-        password:<sf:password path="password"></sf:password>
-        role:<sf:select path="role" >
-        <sf:option value = "user">用户</sf:option>
-        <sf:option value = "insitution">机构</sf:option>
-        <sf:option value = "manager">管理员</sf:option>
-            </sf:select>
+    <form method="post" action="/login">
+        userid: <input type="text" name = "userid">
+        password:<input type="password" name = "password">
+        role: <select name="role">
+            <option value="user">用户</option>
+            <option value = "institution">机构</option>
+            <option value = "manager">管理员</option>
+        </select>
         <input type="submit" value="登录">
-    </sf:form>
+    </form>
 
-    <a href="register">注册</a>
+    <a href="userRegister">用户注册</a><br>
+    <a href="institutionRegister">机构注册</a>
 </body>
 </html>

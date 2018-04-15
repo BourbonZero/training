@@ -9,7 +9,6 @@ import java.time.LocalDate;
  * @date 2018/4/7
  * @description
  */
-@Component
 public class Course {
 
 	private int courseid;

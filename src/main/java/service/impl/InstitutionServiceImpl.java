@@ -70,13 +70,14 @@ public class InstitutionServiceImpl implements InstitutionService {
 		order.setUserid(userid);
 		order.setCourseid(courseid);
 		order.setCourseName(course.getCoursename());
-		order.setClassType(classType);
 		order.setState(OrderState.pay);
-		if (classType.equals("大班")) {
+		if (classType.equals("big")) {
+			order.setClassType("大班");
 			course.setBigClassCurrentNum(course.getBigClassCurrentNum() + 1);
 			courseDAO.changeCourse(course);
 			order.setPrice(course.getBigClassPrice());
 		} else {
+			order.setClassType("小班");
 			course.setSmallClassCurrentNum(course.getSmallClassCurrentNum() + 1);
 			courseDAO.changeCourse(course);
 			order.setPrice(course.getSmallClassPrice());

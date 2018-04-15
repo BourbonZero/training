@@ -2,8 +2,11 @@ package service.impl;
 
 import dao.AdministratorDAO;
 import dao.InstitutionDAO;
+import dao.OrderDAO;
+import dao.UserDAO;
 import entity.Administrator;
 import entity.Institution;
+import entity.Order;
 import entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +21,11 @@ import java.util.List;
  */
 @Component
 public class AdministratorServiceImpl implements AdministratorService {
+
+	@Autowired
+	private UserDAO userDAO;
+	@Autowired
+	private OrderDAO orderDAO;
 
 	@Autowired
 	private AdministratorDAO administratorDAO;
@@ -40,17 +48,25 @@ public class AdministratorServiceImpl implements AdministratorService {
 	}
 
 	@Override
-	public boolean distributePay() {
-		return false;
+	public boolean distributePay(int orderid) {
+		Order order = orderDAO.find(orderid);
+		order.setInstitutionIncome(order.getActualConsumption()*0.8);
+		order.setCollegeIncome(order.getActualConsumption()*0.2);
+		return orderDAO.changeOrder(order);
 	}
 
 	@Override
 	public List<User> lookoverUsers() {
-		return null;
+		return userDAO.findAllUsers();
 	}
 
 	@Override
 	public List<Institution> lookoverInstitutions() {
+		return institutionDAO.findAllInstitutions();
+	}
+
+	@Override
+	public List<Order> lookoverOrders() {
 		return null;
 	}
 }

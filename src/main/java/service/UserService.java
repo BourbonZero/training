@@ -16,9 +16,9 @@ import java.util.List;
  */
 public interface UserService {
 
-	boolean registerUser(User user);
+	boolean registerUser(String userid, String password);
 
-	User loginUser(String id, String password);
+	boolean loginUser(String id, String password);
 
 	boolean setAccount(String userid, String id, String password);
 
