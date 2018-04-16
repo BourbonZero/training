@@ -18,7 +18,7 @@ public interface AdministratorService {
 
 	boolean checkAddInstitution(int id);
 
-	boolean distributePay(int orderid);
+	boolean distributePay();
 
 	List<User> lookoverUsers();
 

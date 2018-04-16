@@ -70,6 +70,12 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
+	public List<Order> findAll() {
+		String sql = "SELECT * FROM orders";
+		return jdbcTemplate.query(sql, new OrderRowMapper());
+	}
+
+	@Override
 	public List<Order> findOrdersByUserid(String userid) {
 		String sql = "SELECT * FROM orders WHERE userid = ?";
 		return jdbcTemplate.query(sql, new OrderRowMapper(),userid);

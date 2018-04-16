@@ -5,13 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import service.InstitutionService;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 /**
  * @author Bourbon
@@ -46,11 +45,19 @@ public class InstitutionController {
 		return "redirect:/institution/"+ id;
 	}
 
+	@RequestMapping("order")
+	public ModelAndView order(@SessionAttribute String id){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("institution/order");
+		modelAndView.addObject("orders", institutionService.lookoverOrders(Integer.parseInt(id)));
+		return modelAndView;
+	}
+
 	@RequestMapping("course")
 	public ModelAndView course(@SessionAttribute String id){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("institution/course");
-		modelAndView.addObject("courses", institutionService.lookoverOrders(Integer.parseInt(id)));
+		modelAndView.addObject("courses", institutionService.lookoverCourses(Integer.parseInt(id)));
 		return modelAndView;
 	}
 
@@ -81,5 +88,17 @@ public class InstitutionController {
 	public String offline(@SessionAttribute String id, String userid, String courseid, String classType){
 		institutionService.createOfflineOrder(userid, Integer.parseInt(courseid), classType);
 		return "redirect:/institution/"+ id;
+	}
+
+	@RequestMapping("record")
+	public String record(@SessionAttribute String id, String userid, String courseid, int score){
+		institutionService.recordScore(userid,Integer.parseInt(courseid),score);
+		return "redirect:/institution/"+ id;
+	}
+
+	@RequestMapping("/logout")
+	public String logout(@SessionAttribute String id, SessionStatus sessionStatus){
+		sessionStatus.setComplete();
+		return "redirect:/";
 	}
 }

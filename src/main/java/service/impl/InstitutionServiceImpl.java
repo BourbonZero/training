@@ -105,4 +105,9 @@ public class InstitutionServiceImpl implements InstitutionService {
 	public List<Order> lookoverOrders(int id) {
 		return orderDAO.findOrdersByInstitutionid(id);
 	}
+
+	@Override
+	public List<Course> lookoverCourses(int id) {
+		return courseDAO.findCoursesByInstitution(id);
+	}
 }

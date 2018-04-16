@@ -34,7 +34,7 @@ public class MyClassDAOImpl implements MyClassDAO {
 
 	@Override
 	public boolean delete(String userid, int courseid) {
-		String sql = "DELETE FROM myclass WHERE userid = ?, courseid = ?";
+		String sql = "DELETE FROM myclass WHERE userid = ? AND courseid = ?";
 		if (jdbcTemplate.update(sql, userid, courseid) > 0) {
 			return true;
 		}

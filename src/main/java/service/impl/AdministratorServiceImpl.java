@@ -48,11 +48,16 @@ public class AdministratorServiceImpl implements AdministratorService {
 	}
 
 	@Override
-	public boolean distributePay(int orderid) {
-		Order order = orderDAO.find(orderid);
-		order.setInstitutionIncome(order.getActualConsumption()*0.8);
-		order.setCollegeIncome(order.getActualConsumption()*0.2);
-		return orderDAO.changeOrder(order);
+	public boolean distributePay() {
+		List<Order> orders = orderDAO.findAll();
+		for (Order order : orders){
+			if (order.getInstitutionIncome() == 0){
+				order.setInstitutionIncome(order.getActualConsumption()*0.8);
+				order.setCollegeIncome(order.getActualConsumption()*0.2);
+				orderDAO.changeOrder(order);
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -67,6 +72,6 @@ public class AdministratorServiceImpl implements AdministratorService {
 
 	@Override
 	public List<Order> lookoverOrders() {
-		return null;
+		return orderDAO.findAll();
 	}
 }

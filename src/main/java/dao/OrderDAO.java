@@ -19,6 +19,8 @@ public interface OrderDAO {
 
 	Order find(int id);
 
+	List<Order> findAll();
+
 	List<Order> findOrdersByUserid(String userid);
 
 	List<Order> findOrdersByInstitutionid(int id);

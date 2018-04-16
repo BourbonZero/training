@@ -49,7 +49,7 @@ public class HomeController {
 			}
 		} else {
 			if (administratorService.checkLogin(userid, password)) {
-				return "redirect:/administrator/" + userid;
+				return "redirect:/administrator/info";
 			}
 		}
 		return "redirect:/";

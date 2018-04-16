@@ -29,4 +29,6 @@ public interface InstitutionService {
 	boolean recordScore(String userid, int courseid, int score);
 
 	List<Order> lookoverOrders(int id);
+
+	List<Course> lookoverCourses(int id);
 }
